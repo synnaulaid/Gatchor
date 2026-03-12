@@ -2,3 +2,6 @@ __pycache__/*
 temp.py
 test.py
 hash.py
+core
+test/*
+block.json
