@@ -1,2 +1,2 @@
-# Gatchor-1024
+# Gatchor
 Cryptographic Hash (Experimental)
