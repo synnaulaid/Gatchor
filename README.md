@@ -1,4 +1,4 @@
-#Gatchor256 Documentation
+# Gatchor256 Documentation
 
 ## Overview
 **Gatchor256** is a hashing library that provides a simple and efficient interface for hashing data using the **Gatchor256 algorithm**.
