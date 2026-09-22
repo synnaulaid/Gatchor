@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <span>
 #include <string>
 #include <vector>
 
@@ -11,10 +12,13 @@ class Gatchor256 {
 public:
     static constexpr size_t BLOCK_SIZE = 64;
     static constexpr size_t ROUNDS = 12;
+    using Digest = std::array<uint8_t, 32>;
 
     static std::string hash(const std::vector<uint8_t>& data);
+    static std::string hash(std::span<const uint8_t> data);
+    static void hash_into(std::span<const uint8_t> data, Digest& digest);
 
-    static uint64_t rotl(uint64_t x, int r);
+    static constexpr uint64_t rotl(uint64_t x, unsigned int r) noexcept;
 
 private:
     static void compress(

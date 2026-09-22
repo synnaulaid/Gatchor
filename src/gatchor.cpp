@@ -1,9 +1,7 @@
 #include "gatchor.hpp"
 
-#include <algorithm>
+#include <bit>
 #include <cstring>
-#include <iomanip>
-#include <sstream>
 
 namespace gatchor {
 
@@ -18,9 +16,9 @@ static const std::array<uint64_t, 8> IV = {
     0x5BE0CD19137E2179ULL
 };
 
-uint64_t Gatchor256::rotl(uint64_t x, int r)
+constexpr uint64_t Gatchor256::rotl(uint64_t x, unsigned int r) noexcept
 {
-    return (x << r) | (x >> (64 - r));
+    return std::rotl(x, static_cast<int>(r));
 }
 
 static inline void mix(
@@ -53,7 +51,9 @@ void Gatchor256::compress(
     std::array<uint64_t, 8> m{};
 
     for (size_t i = 0; i < 8; ++i) {
-        std::memcpy(&m[i], block + (i * 8), 8);
+        for (unsigned int byte = 0; byte < 8; ++byte) {
+            m[i] |= static_cast<uint64_t>(block[i * 8 + byte]) << (byte * 8);
+        }
     }
 
     std::array<uint64_t, 8> v = state;
@@ -71,7 +71,7 @@ void Gatchor256::compress(
         mix(v[1], v[3], v[5], v[7]);
 
         for (size_t i = 0; i < 8; ++i) {
-            v[i] += rotl(m[i], (round + i) % 64);
+            v[i] += rotl(m[i], static_cast<unsigned int>((round + i) & 63));
         }
     }
 
@@ -80,43 +80,64 @@ void Gatchor256::compress(
     }
 }
 
-std::string Gatchor256::hash(const std::vector<uint8_t>& data)
+void Gatchor256::hash_into(std::span<const uint8_t> data, Digest& digest)
 {
     std::array<uint64_t, 8> state = IV;
+    const auto* input = data.data();
+    size_t remaining = data.size();
 
-    std::vector<uint8_t> padded = data;
-
-    uint64_t bit_len = padded.size() * 8;
-
-    // # 1: padding 0x80
-    padded.push_back(0x80);
-
-    // # 2: padding 0x00 -> 8 byte
-    while ((padded.size() % BLOCK_SIZE) != 56) {
-        padded.push_back(0x00);
+    while (remaining >= BLOCK_SIZE) {
+        compress(state, input);
+        input += BLOCK_SIZE;
+        remaining -= BLOCK_SIZE;
     }
 
-    // # 3: long input (8 byte, little-endian)
-    for (int i = 0; i < 8; ++i) {
-        padded.push_back((bit_len >> (i * 8)) & 0xFF);
+    // Padding is kept on the stack, avoiding a full input-sized allocation.
+    std::array<uint8_t, BLOCK_SIZE * 2> padded{};
+    if (remaining != 0) {
+        std::memcpy(padded.data(), input, remaining);
+    }
+    padded[remaining] = 0x80;
+    const size_t length_offset =
+        (remaining < 56) ? 56 : BLOCK_SIZE + 56;
+    const uint64_t bit_len = static_cast<uint64_t>(data.size()) * 8;
+    for (unsigned int byte = 0; byte < 8; ++byte) {
+        padded[length_offset + byte] =
+            static_cast<uint8_t>(bit_len >> (byte * 8));
     }
 
-    // # 4: multi-block compress
-    for (size_t i = 0; i < padded.size(); i += BLOCK_SIZE) {
-        compress(state, &padded[i]);
+    compress(state, padded.data());
+    if (length_offset == BLOCK_SIZE + 56) {
+        compress(state, padded.data() + BLOCK_SIZE);
     }
 
-    // # 5: fold state for 256-bit output
-    std::stringstream ss;
-    for (int i = 0; i < 4; ++i) {
-        uint64_t out = state[i] ^ state[i + 4];
-        ss << std::hex
-           << std::setw(16)
-           << std::setfill('0')
-           << out;
+    for (size_t i = 0; i < 4; ++i) {
+        const uint64_t out = state[i] ^ state[i + 4];
+        for (unsigned int byte = 0; byte < 8; ++byte) {
+            digest[i * 8 + byte] =
+                static_cast<uint8_t>(out >> ((7 - byte) * 8));
+        }
     }
+}
 
-    return ss.str();
+std::string Gatchor256::hash(std::span<const uint8_t> data)
+{
+    Digest digest{};
+    hash_into(data, digest);
+
+    static constexpr char hex[] = "0123456789abcdef";
+    std::string result;
+    result.resize(digest.size() * 2);
+    for (size_t i = 0; i < digest.size(); ++i) {
+        result[i * 2] = hex[digest[i] >> 4];
+        result[i * 2 + 1] = hex[digest[i] & 0x0f];
+    }
+    return result;
+}
+
+std::string Gatchor256::hash(const std::vector<uint8_t>& data)
+{
+    return hash(std::span<const uint8_t>(data));
 }
 
 }
