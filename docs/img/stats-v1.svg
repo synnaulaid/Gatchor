@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="760" viewBox="0 0 1120 760" role="img" aria-labelledby="title description">
+  <title id="title">Gatchor256 v1 measured statistics</title>
+  <desc id="description">One sample run: 129.27 changed bits out of 256 for byte-flip avalanche, zero collisions among 5000 random inputs, output bit frequencies from 47.75 to 52.56 percent over 4096 inputs, and 0.83 to 3.08 million hashes per second for an 86-byte header benchmark under variable system load.</desc>
+  <defs>
+    <linearGradient id="background" x2="0" y2="1">
+      <stop offset="0" stop-color="#101a2b"/>
+      <stop offset="1" stop-color="#080d16"/>
+    </linearGradient>
+    <linearGradient id="blue" x2="1" y2="0">
+      <stop stop-color="#3278f6"/>
+      <stop offset="1" stop-color="#59b2ff"/>
+    </linearGradient>
+    <linearGradient id="green" x2="1" y2="0">
+      <stop stop-color="#11b981"/>
+      <stop offset="1" stop-color="#54e3a4"/>
+    </linearGradient>
+    <style>
+      text { font-family: Inter, ui-sans-serif, system-ui, sans-serif; fill: #e9f0fa; }
+      .muted { fill: #9aabc0; }
+      .card { fill: #111c2d; stroke: #26364b; stroke-width: 1.5; }
+      .label { font-size: 17px; font-weight: 700; letter-spacing: .5px; }
+      .small { font-size: 14px; }
+    </style>
+  </defs>
+
+  <rect width="1120" height="760" rx="22" fill="url(#background)"/>
+  <text x="48" y="62" font-size="31" font-weight="800">GATCHOR256 v1 <tspan fill="#57a6ff">/ MEASURED STATS</tspan></text>
+  <text x="50" y="91" class="muted" font-size="15">Observed 2026-10-02 · test_security + test_benchmark · sample results, not a security assessment</text>
+
+  <rect class="card" x="40" y="120" width="500" height="255" rx="16"/>
+  <text class="label" x="68" y="158" fill="#66aaff">01 / BYTE-FLIP AVALANCHE</text>
+  <text x="68" y="216" font-size="48" font-weight="800">129.27<tspan font-size="22" class="muted"> / 256 bits</tspan></text>
+  <text x="68" y="249" class="muted" font-size="16">Mean for flipping one bit in each of 11 bytes of “hello world”</text>
+  <rect x="68" y="283" width="436" height="18" rx="9" fill="#26364b"/>
+  <rect x="68" y="283" width="220" height="18" rx="9" fill="url(#blue)"/>
+  <line x1="286" y1="274" x2="286" y2="310" stroke="#ffd166" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="68" y="333" class="small muted">0</text>
+  <text x="264" y="333" class="small" fill="#ffd166">ideal average: 128 (50%)</text>
+  <text x="494" y="333" class="small muted">256</text>
+  <text x="68" y="358" class="small muted">Observed mean: 50.50% of output bits changed.</text>
+
+  <rect class="card" x="560" y="120" width="520" height="255" rx="16"/>
+  <text class="label" x="590" y="158" fill="#5ce0a3">02 / RANDOM COLLISION SMOKE TEST</text>
+  <text x="590" y="242" font-size="72" font-weight="800" fill="#51dfa0">0</text>
+  <text x="690" y="220" font-size="22" font-weight="700">collisions</text>
+  <text x="690" y="249" class="muted" font-size="17">among 5,000 deterministic-seed random inputs</text>
+  <line x1="590" y1="280" x2="1048" y2="280" stroke="#26364b"/>
+  <text x="590" y="315" class="small muted">This small sample does not demonstrate collision resistance</text>
+  <text x="590" y="339" class="small muted">or establish suitability for security-sensitive use.</text>
+
+  <rect class="card" x="40" y="397" width="500" height="205" rx="16"/>
+  <text class="label" x="68" y="436" fill="#bc8cff">03 / OUTPUT BIT FREQUENCY</text>
+  <text x="68" y="480" font-size="34" font-weight="800">50.14% <tspan class="muted" font-size="18">mean over 256 positions</tspan></text>
+  <text x="68" y="518" class="muted" font-size="16">4,096 seeded random 32-byte inputs</text>
+  <text x="68" y="558" font-size="18">Min <tspan fill="#bc8cff" font-weight="700">47.75%</tspan><tspan class="muted">  ·  Max </tspan><tspan fill="#bc8cff" font-weight="700">52.56%</tspan></text>
+  <rect x="68" y="574" width="436" height="8" rx="4" fill="#27364b"/>
+  <rect x="188" y="571" width="210" height="14" rx="7" fill="#a16af4"/>
+  <line x1="286" y1="565" x2="286" y2="590" stroke="#ffd166" stroke-width="2"/>
+  <text x="68" y="596" class="small muted">45%</text>
+  <text x="277" y="596" class="small" fill="#ffd166">50%</text>
+  <text x="482" y="596" class="small muted">55%</text>
+
+  <rect class="card" x="560" y="397" width="520" height="205" rx="16"/>
+  <text class="label" x="590" y="436" fill="#ffd166">04 / CPU HEADER HASH BENCHMARK</text>
+  <text x="590" y="485" font-size="34" font-weight="800">0.83–3.08 <tspan font-size="19" class="muted">MH/s</tspan></text>
+  <text x="590" y="518" class="muted" font-size="16">Three observed runs · fixed 86-byte header · 100,000 hashes/run</text>
+  <rect x="590" y="544" width="458" height="15" rx="7.5" fill="#2b3542"/>
+  <rect x="590" y="544" width="458" height="15" rx="7.5" fill="url(#green)" opacity=".78"/>
+  <text x="590" y="585" class="small muted">Shared-host load varied; not a portable or production mining claim.</text>
+
+  <rect x="40" y="624" width="1040" height="92" rx="14" fill="#281a21" stroke="#67343a"/>
+  <text x="68" y="660" font-size="17" font-weight="800" fill="#ff8585">IMPORTANT</text>
+  <text x="174" y="660" font-size="16">Avalanche, bit-frequency, and collision smoke tests do not establish cryptographic security.</text>
+  <text x="68" y="690" font-size="16" class="muted">Gatchor256 is experimental and unaudited. Do not use it for blockchain consensus, signatures, or real assets.</text>
+  <text x="1080" y="742" text-anchor="end" font-size="12" class="muted">Results are tied to the tested revision and environment.</text>
+</svg>

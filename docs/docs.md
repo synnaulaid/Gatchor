@@ -60,3 +60,27 @@ serialization for protocol objects.
 The `test_benchmark` executable measures repeated hashing of an 80-byte buffer
 with a changing nonce. This is a performance benchmark only and is not a
 production mining or consensus implementation.
+
+The README's Gatchor256 v1 chart reports a sample run of the current
+`test_security` and `test_benchmark` programs. It records the measured avalanche
+average, bit-frequency range, random-collision smoke-test count, and 86-byte
+header throughput. Results vary by input sample, CPU, and system load; they do
+not establish cryptographic security or production mining performance.
+
+## Experimental private-testnet scaffold
+
+The repository also contains experimental Proof-of-Work headers, signed
+transactions, a replayed account ledger, local chain snapshots, and a
+127.0.0.1-only block propagation prototype. Protocol v3's transaction v2
+encoding is fixed at 157 bytes and uses Ed25519 signatures. Genesis allocation
+and account nonce state are deterministic; each transfer debits `amount + fee`,
+credits the recipient with `amount`, and burns the fee. There is no block
+reward or difficulty adjustment.
+
+These components are useful only for local protocol experiments. The custom
+Gatchor256 hash is used for header PoW and Merkle/genesis commitments despite
+not being cryptographically reviewed; a valid Ed25519 transaction signature
+does not make the chain consensus secure. Snapshots and networking are not
+hardened for hostile environments. Do not deploy this scaffold with real
+assets, expose its loopback prototype to an untrusted network, or treat passing
+tests/statistical hash tests as a security audit.
