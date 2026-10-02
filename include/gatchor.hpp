@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <bit>
 #include <cstdint>
 #include <span>
 #include <string>
@@ -8,6 +9,8 @@
 
 namespace gatchor {
 
+// Experimental non-cryptographic hash. Do not use for authentication,
+// signatures, commitments, address derivation, or blockchain consensus.
 class Gatchor256 {
 public:
     static constexpr size_t BLOCK_SIZE = 64;
@@ -18,7 +21,10 @@ public:
     static std::string hash(std::span<const uint8_t> data);
     static void hash_into(std::span<const uint8_t> data, Digest& digest);
 
-    static constexpr uint64_t rotl(uint64_t x, unsigned int r) noexcept;
+    static constexpr uint64_t rotl(uint64_t x, unsigned int r) noexcept
+    {
+        return std::rotl(x, static_cast<int>(r & 63U));
+    }
 
 private:
     static void compress(

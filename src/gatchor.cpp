@@ -16,11 +16,6 @@ static const std::array<uint64_t, 8> IV = {
     0x5BE0CD19137E2179ULL
 };
 
-constexpr uint64_t Gatchor256::rotl(uint64_t x, unsigned int r) noexcept
-{
-    return std::rotl(x, static_cast<int>(r));
-}
-
 static inline void mix(
     uint64_t& a,
     uint64_t& b,

@@ -1,17 +1,21 @@
 # Gatchor256 Documentation
 
 ## Overview
-**Gatchor256** is a hashing library that provides a simple and efficient interface for hashing data using the **Gatchor256 algorithm**.
-This library is designed to be **fast, reliable, and suitable for a wide range of applications**, ranging from data integrity checks to cryptographic operations.
+**Gatchor256** is an experimental, non-cryptographic hashing library that provides
+a simple and efficient interface for data-integrity experiments and benchmarks.
 
-> ⚠️ **Note:** Gatchor256 is currently under active development. Contributions and feedback are highly appreciated!
+> ⚠️ **Security warning:** Gatchor256 has not received independent cryptanalysis
+> or a security audit. Do not use it for authentication, signatures, password
+> hashing, commitments, Merkle trees, address derivation, or blockchain
+> consensus/Proof-of-Work. Use a standardized, vetted primitive such as
+> SHA-256, SHA-3, BLAKE2, or BLAKE3 for security-sensitive applications.
 
 ---
 
 ## Features
 - Fast and efficient hashing
 - Simple and CPU-friendly
-- Suitable for both small and large datasets
+- Suitable for experiments and benchmarking only
 - Open to community contributions
 
 ---
@@ -46,19 +50,16 @@ constant and reducing per-hash overhead. The benchmark uses this exact
 80-byte header/nonce path. The existing `hash(vector)` API remains available
 for applications that need a hexadecimal string.
 
-The default build enables `-march=native` for maximum throughput on the local
-CPU:
+The default build is portable and does not enable CPU-specific instructions.
+For local benchmarking only, `-march=native` can be enabled explicitly:
 
 ```
 cmake -S . -B build -DGATCHOR_NATIVE_OPTIMIZATIONS=ON
 cmake --build build -j$(nproc)
 ```
 
-For a portable binary, disable CPU-specific instructions:
-
-```
-cmake -S . -B build -DGATCHOR_NATIVE_OPTIMIZATIONS=OFF
-```
+Do not use the native optimization option for binaries distributed to other
+machines.
 
 # Statistics
 ![Gatchor256 Benchmark](docs/img/stats.png)

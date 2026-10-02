@@ -8,6 +8,8 @@
 
 using namespace gatchor;
 
+// These are statistical smoke tests only; they do not establish
+// cryptographic security or make Gatchor256 suitable for blockchain use.
 void avalanche_test(const std::vector<uint8_t>& input) {
     Gatchor256::Digest orig{};
     Gatchor256::hash_into(input, orig);

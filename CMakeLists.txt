@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(GATCHOR_NATIVE_OPTIMIZATIONS
-    "Enable CPU-specific optimizations for the local mining host" ON)
+    "Enable CPU-specific optimizations for the local mining host" OFF)
 
 add_compile_options(-O3 -Wall -Wextra)
 

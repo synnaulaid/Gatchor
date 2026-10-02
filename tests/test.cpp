@@ -4,6 +4,10 @@
 #include <vector>
 
 int main() {
+    assert(gatchor::Gatchor256::rotl(1, 0) == 1);
+    assert(gatchor::Gatchor256::rotl(1, 64) == 1);
+    assert(gatchor::Gatchor256::rotl(1, 65) == 2);
+
     std::vector<uint8_t> data = {'t','e','s','t'};
     std::string h = gatchor::Gatchor256::hash(data);
     assert(h == "2b3845225502545aad35f0755ef88d5fef229d7f6ecb6c27253cbc8e7ea43e66");
